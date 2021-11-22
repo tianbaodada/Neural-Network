@@ -6,6 +6,7 @@ class Convolutional(Layer):
     def __init__(self, input_shape, kernel_size, depth, l2=0):
         input_depth, input_height, input_width = input_shape
         self.depth = depth
+        self.kernel_size = kernel_size
         self.input_shape = input_shape
         self.input_depth = input_depth
         self.output_shape = (depth, input_height - kernel_size + 1, input_width - kernel_size + 1)
@@ -18,7 +19,10 @@ class Convolutional(Layer):
         self.store_b = np.zeros(self.biases.shape)
         self.store_n = 0
         self.l2 = l2
-        
+    
+    def __str__(self):
+        return f'{self.__class__.__name__}({self.input_shape}, {self.kernel_size}, {self.depth}, l2={self.l2})'
+
     def forward(self, input):
         self.input = input
         self.output = np.copy(self.biases)

@@ -1,4 +1,5 @@
 import numpy as np
+import matplotlib.pyplot as plt
 import datetime
 
 def save_network(network, id):
@@ -88,12 +89,36 @@ def train(network,
                 save_network(network, net_id)
             if verbose: print(f"validation accuracy: {acc}")
 
-    if test_data:
-        load_network(network, net_id)
-        x_test, y_test = test_data
-        pred_res = [int(np.argmax(predict(network, x)) == np.argmax(y)) for x,y in zip(x_test, y_test)]
-        acc = sum(pred_res)/len(pred_res)
-        # test_accuracy.append(acc)
-        if verbose: print(f"test accuracy: {acc}")
+        if test_data:
+            # load_network(network, net_id)
+            x_test, y_test = test_data
+            pred_res = [int(np.argmax(predict(network, x)) == np.argmax(y)) for x,y in zip(x_test, y_test)]
+            acc = sum(pred_res)/len(pred_res)
+            test_accuracy.append(acc)
+            if verbose: print(f"test accuracy: {acc}")
 
     return (training_accuracy, valid_accuracy, test_accuracy, training_loss)
+
+def plot_output(network, x):
+    output = x
+    for layer in network:
+        output = layer.forward(output)
+        if len(output.shape) == 3:
+            output_plot = output
+            
+            output_plot = output_plot - output_plot.mean()
+            output_plot /= output_plot.std()
+            output_plot *= 64
+            output_plot += 128
+            output_plot = np.clip(output_plot, 0, 255).astype('uint8')
+            
+            num_row = 2
+            num_col = 5
+            fig, axes = plt.subplots(num_row, num_col, figsize=(1.5 * num_col, 2 * num_row))
+            for i in range(len(output_plot)):
+                ax = axes[i // num_col, i % num_col]
+                ax.imshow(output_plot[i], cmap='gray')
+                ax.set_title(f'feature {i + 1}')
+                ax.axis('off')
+            plt.tight_layout()
+            plt.show()

@@ -3,6 +3,8 @@ from layer import Layer
 
 class Dense(Layer):
     def __init__(self, input_size, output_size, l2=0):
+        self.input_size = input_size
+        self.output_size = output_size
         self.weights = np.random.randn(output_size, input_size)
         # self.biases = np.ones((output_size, 1)) * 0.1
         self.biases = np.random.randn(output_size, 1)
@@ -10,6 +12,9 @@ class Dense(Layer):
         self.store_b = np.zeros(self.biases.shape)
         self.store_n = 0
         self.l2 = l2
+
+    def __str__(self):
+        return f'{self.__class__.__name__}({self.input_size}, {self.output_size}, l2={self.l2})'
 
     def forward(self, input):
         self.input = input

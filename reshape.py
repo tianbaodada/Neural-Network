@@ -6,6 +6,9 @@ class Reshape(Layer):
         self.input_shape = input_shape
         self.output_shape = output_shape
 
+    def __str__(self):
+        return f'{self.__class__.__name__}({self.input_shape}, {self.output_shape})'
+
     def forward(self, input):
         self.output = np.reshape(input, self.output_shape)
         return self.output

@@ -3,6 +3,9 @@ class Layer:
         self.input = None
         self.output = None
 
+    def __str__(self):
+        return f'{self.__class__.__name__}()'
+        
     def forward(self, input):
         # TODO: return output
         pass

@@ -3,3 +3,5 @@ save_data
 resource
 .DS_Store
 result.png
+test*
+*.png
